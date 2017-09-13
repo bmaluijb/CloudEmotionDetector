@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2>Upload image for emotion detection</h2>
+
+<p>
+    Upload one image file for emotion detection<br /><br />
+    Only one face will be detected.<br />
+    The image file must be no larger than 4MB.<br />
+    The image must be of PNG, JPEG, GIF (only first frame) or BMP format.<br />
+    The detectable face size range is 36x36 to 4096x4096 pixels
+</p>
+<fieldset>
+    <input type="file" id="fileControl" accept="image/*"/>
+    <img id="myImgage" src="#" alt="" style="position:absolute;top:300px; left:50px" />
+    <canvas id="myCanvas" style="position:absolute;top:300px; left:50px" width="1000" height="1000"></canvas>
+    <div id="myEmotion" style="color:white;font-size:large;"></div>
+</fieldset>
+
+
+@section scripts{
+
+    <script>
+        //initialize canvas
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+
+        function upload(json) {
+            var result = JSON.parse(json);            
+
+            //draw rectangle around face
+            ctx.lineWidth = "6";
+            ctx.strokeStyle = "yellow";
+            ctx.rect(result.faceRectangle.left, result.faceRectangle.top, result.faceRectangle.width, result.faceRectangle.height);
+            ctx.stroke();
+
+            //set happiness label and position it
+            var d = document.getElementById('myEmotion');
+            d.innerHTML = result.primaryEmotion;
+            d.style.position = "absolute";
+            d.style.left = 50 + result.faceRectangle.left + (result.faceRectangle.width / 4)  + 'px';
+            d.style.top = (300 + result.faceRectangle.top + result.faceRectangle.height + 10) + 'px';
+        }
+
+        function imageIsLoaded(e) {   
+            //reset canvas and emotion label
+            canvas.width = canvas.width;
+            document.getElementById('myEmotion').innerHTML = '';
+
+            document.getElementById('myImgage').src = e.target.result;
+        };
+
+        $('#fileControl').on('change', function (e) {
+            var files = e.target.files;
+
+            if (files.length > 0) {
+                var data = new FormData();
+                data.append("file", files[0]);
+
+                var reader = new FileReader();
+                reader.onload = imageIsLoaded;
+                reader.readAsDataURL(this.files[0]);
+
+                $.ajax({
+                    type: "POST",
+                    url: '/Home/UploadImage',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        upload(result);
+                    },
+                    error: function (ex) {
+                        alert('Emotion recognition failed')
+                    }
+                });
+            }
+        });
+
+    </script>
+}
