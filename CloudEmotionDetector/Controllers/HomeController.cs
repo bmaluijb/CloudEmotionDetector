@@ -36,7 +36,7 @@ namespace CloudDetector.Controllers
 
                     // Request headers, include your own subscription key
                     client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "{ enter your subscription key }");
-
+  
                     var uri = "https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize?" + queryString;
 
                     HttpResponseMessage response;

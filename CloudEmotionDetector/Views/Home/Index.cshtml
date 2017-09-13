@@ -32,10 +32,11 @@
             //draw rectangle around face
             ctx.lineWidth = "6";
             ctx.strokeStyle = "yellow";
-            ctx.rect(result.faceRectangle.left, result.faceRectangle.top, result.faceRectangle.width, result.faceRectangle.height);
+            ctx.rect(result.faceRectangle.left, result.faceRectangle.top,
+                result.faceRectangle.width, result.faceRectangle.height);
             ctx.stroke();
 
-            //set happiness label and position it
+            //set emotion div and position it
             var d = document.getElementById('myEmotion');
             d.innerHTML = result.primaryEmotion;
             d.style.position = "absolute";
@@ -49,7 +50,8 @@
             document.getElementById('myEmotion').innerHTML = '';
         }
 
-        function imageIsLoaded(e) {   
+        function imageIsLoaded(e) {
+            resetCanvas();
             document.getElementById('myImgage').src = e.target.result;
         };
 
