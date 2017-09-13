@@ -43,11 +43,13 @@
             d.style.top = (300 + result.faceRectangle.top + result.faceRectangle.height + 10) + 'px';
         }
 
-        function imageIsLoaded(e) {   
+        function resetCanvas() {
             //reset canvas and emotion label
             canvas.width = canvas.width;
             document.getElementById('myEmotion').innerHTML = '';
+        }
 
+        function imageIsLoaded(e) {   
             document.getElementById('myImgage').src = e.target.result;
         };
 
