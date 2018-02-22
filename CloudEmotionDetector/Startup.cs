@@ -11,6 +11,7 @@ namespace CloudDetector
 {
     public class Startup
     {
+        //this is the startup method
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
